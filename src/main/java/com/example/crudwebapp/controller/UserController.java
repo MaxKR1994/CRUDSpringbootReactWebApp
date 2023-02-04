@@ -29,4 +29,16 @@ public class UserController {
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
+
+    @PutMapping("/user/{id}")
+    User updateUser(@RequestBody User newUser,@PathVariable Long id) {
+        return userRepository.findById(id).
+                map(user -> {
+                    user.setName(newUser.getName());
+                    user.setUserName(newUser.getUserName());
+                    user.setEmail(newUser.getEmail());
+                    return userRepository.save(user);
+                }).orElseThrow(() -> new UserNotFoundException(id));
+    }
+
 }
